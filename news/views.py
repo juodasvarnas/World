@@ -1,8 +1,8 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import News, Category
 from .forms import NewsForms
-from django.views.generic import ListView, DetailView
-
+from django.views.generic import ListView, DetailView, CreateView
+from django.urls import reverse_lazy
 
 # Create your views here.
 
@@ -64,14 +64,21 @@ class ViewNews(DetailView):
  #   return render(request, 'news/view_news.html', {"news_item": news_item})
 
 
-def add_news(request):
-    if request.method == 'POST':
-        form = NewsForms(request.POST)
-        if form.is_valid():
-            # print(form.cleaned_data)
-            # news = News.objects.create(**form.cleaned_data)
-            news = form.save()
-            return redirect(news)
-    else:
-        form = NewsForms()
-    return render(request, 'news/add_news.html', {'form': form})
+class CreateNews(CreateView):
+    form_class = NewsForms
+    template_name = 'news/add_news.html'
+    success_url = reverse_lazy('home')
+
+
+
+#def add_news(request):
+#    if request.method == 'POST':
+#        form = NewsForms(request.POST)
+#        if form.is_valid():
+#            # print(form.cleaned_data)
+#            # news = News.objects.create(**form.cleaned_data)
+#            news = form.save()
+#            return redirect(news)
+#    else:
+#        form = NewsForms()
+#    return render(request, 'news/add_news.html', {'form': form})
